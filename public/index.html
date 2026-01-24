@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HeartConnect - Nơi trao gửi tình cảm chân thành</title>
+    <base href="/">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-heart"></i>
+                HeartConnect
+                <i class="fas fa-heart"></i>
+            </div>
+            <div class="tagline">Nơi trao gửi tình cảm chân thành</div>
+        </header>
+        
+        <!-- Phần đăng ký/đăng nhập/quên mật khẩu -->
+        <div class="auth-container" id="auth-container">
+            <div class="auth-form">
+                <div class="auth-tabs">
+                    <div class="auth-tab active" onclick="switchAuthTab('login')">Đăng nhập</div>
+                    <div class="auth-tab" onclick="switchAuthTab('register')">Đăng ký</div>
+                    <div class="auth-tab" onclick="switchAuthTab('forgot')">Quên MK</div>
+                </div>
+                
+                <!-- Form đăng nhập -->
+                <div id="login-form" class="auth-content">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-user"></i>
+                            Username hoặc Email đăng nhập
+                        </label>
+                        <input type="text" class="form-input" id="login-identifier" placeholder="Nhập vào Username hoặc Email đăng nhập">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-lock"></i>
+                            Mật khẩu
+                        </label>
+                        <input type="password" class="form-input" id="login-password" placeholder="Nhập mật khẩu">
+                    </div>
+                    
+                    <button class="btn" onclick="login()">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Đăng nhập
+                    </button>
+                    
+                    <div class="forgot-password">
+                        <a onclick="switchAuthTab('forgot')">Quên mật khẩu?</a>
+                    </div>
+                </div>
+                
+                <!-- Form đăng ký -->
+                <div id="register-form" class="auth-content" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label required">
+                            <i class="fas fa-user"></i>
+                            Họ và tên
+                        </label>
+                        <input type="text" class="form-input" id="register-fullname" placeholder="Nhập họ tên đầy đủ">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label required">
+                            <i class="fas fa-at"></i>
+                            Username
+                        </label>
+                        <input type="text" class="form-input" id="register-username" placeholder="Chọn username của bạn">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label required">
+                            <i class="fas fa-envelope"></i>
+                            Email
+                        </label>
+                        <input type="email" class="form-input" id="register-email" placeholder="email@example.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label required">
+                            <i class="fas fa-phone"></i>
+                            Số điện thoại
+                        </label>
+                        <input type="tel" class="form-input" id="register-phone" placeholder="0987 654 321">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label required">
+                            <i class="fab fa-facebook"></i>
+                            Link Facebook
+                        </label>
+                        <input type="text" class="form-input" id="register-facebook" placeholder="https://facebook.com/username-của-bạn">
+                        <small style="color: #666; display: block; margin-top: 5px;">Facebook là bắt buộc để người khác có thể kết nối với bạn</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label required">
+                            <i class="fas fa-lock"></i>
+                            Mật khẩu
+                        </label>
+                        <input type="password" class="form-input" id="register-password" placeholder="Tạo mật khẩu (ít nhất 6 ký tự)">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label required">
+                            <i class="fas fa-lock"></i>
+                            Xác nhận mật khẩu
+                        </label>
+                        <input type="password" class="form-input" id="register-confirm-password" placeholder="Nhập lại mật khẩu">
+                    </div>
+                    
+                    <button class="btn" onclick="register()">
+                        <i class="fas fa-user-plus"></i>
+                        Đăng ký tài khoản
+                    </button>
+                </div>
+                
+                <!-- Form quên mật khẩu -->
+                <div id="forgot-form" class="auth-content" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-key"></i>
+                            Khôi phục mật khẩu bằng
+                        </label>
+                        <div class="reset-options">
+                            <div class="reset-option selected" onclick="selectResetMethod(this, 'email')">
+                                <i class="fas fa-envelope"></i>
+                                <div>Email</div>
+                            </div>
+                            <div class="reset-option" onclick="selectResetMethod(this, 'phone')">
+                                <i class="fas fa-phone"></i>
+                                <div>Số điện thoại</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-envelope" id="reset-icon"></i>
+                            <span id="reset-label">Nhập email của bạn</span>
+                        </label>
+                        <input type="text" class="form-input" id="reset-identifier" placeholder="Nhập email của bạn">
+                    </div>
+                    
+                    <button class="btn" onclick="resetPassword()">
+                        <i class="fas fa-redo"></i>
+                        Gửi mã khôi phục
+                    </button>
+                    
+                    <div class="forgot-password">
+                        <a onclick="switchAuthTab('login')">Quay lại đăng nhập</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="auth-form">
+                <h2 class="card-title">
+                    <i class="fas fa-heart"></i>
+                    Tại sao chọn HeartConnect?
+                </h2>
+                
+                <div style="line-height: 1.8;">
+                    <p><strong>🎯 Gửi tín hiệu tình cảm:</strong> 3 loại tin nhắn: Tâm sự, Bày tỏ, Muốn quay lại.</p>
+                    <p><strong>👁️ Xem trước khi gửi:</strong> Kiểm tra nội dung trước khi gửi đi.</p>
+                    <p><strong>🔗 Facebook bắt buộc:</strong> Để dễ dàng kết nối và xác minh danh tính.</p>
+                    <p><strong>📱 Đa kênh đăng nhập:</strong> Đăng nhập bằng username, email hoặc số điện thoại.</p>
+                    <p><strong>🔐 Khôi phục mật khẩu:</strong> Quên mật khẩu? Khôi phục ngay qua email hoặc SMS.</p>
+                    <p><strong>💌 Hộp thư riêng tư:</strong> Quản lý tin nhắn đến và đi dễ dàng.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Phần nội dung chính (hiển thị khi đã đăng nhập) -->
+        <div id="main-content" style="display: none;">
+            <div class="nav-tabs">
+                <div class="tab active" data-tab="send">
+                    <i class="fas fa-paper-plane"></i>
+                    Gửi tin nhắn
+                </div>
+                <div class="tab" data-tab="inbox">
+                    <i class="fas fa-inbox"></i>
+                    Hộp thư đến
+                    <div class="tab-badge" id="inbox-count">0</div>
+                </div>
+                <div class="tab" data-tab="profile">
+                    <i class="fas fa-user"></i>
+                    Hồ sơ cá nhân
+                </div>
+                <div class="tab" onclick="logout()" style="color: #ff6b6b;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Đăng xuất
+                </div>
+            </div>
+            
+            <div class="content">
+                <div class="main-content">
+                    <!-- Form gửi tin nhắn -->
+                    <div class="form-section active" id="send-form">
+                        <div class="card">
+                            <h2 class="card-title">
+                                <i class="fas fa-edit"></i>
+                                Gửi tin nhắn tình cảm
+                            </h2>
+                            
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-user"></i>
+                                    Chọn loại tin nhắn
+                                </label>
+                                <div class="message-types">
+                                    <div class="message-type" data-type="share" onclick="selectMessageType(this, 'share')">
+                                        <div class="type-icon">
+                                            <i class="fas fa-comments"></i>
+                                        </div>
+                                        <div class="type-title">Lời tâm sự</div>
+                                        <div class="type-desc">Chia sẻ cảm xúc, suy nghĩ</div>
+                                    </div>
+                                    
+                                    <div class="message-type" data-type="confess" onclick="selectMessageType(this, 'confess')">
+                                        <div class="type-icon">
+                                            <i class="fas fa-heart"></i>
+                                        </div>
+                                        <div class="type-title">Bày tỏ tình cảm</div>
+                                        <div class="type-desc">Nói ra tình cảm thầm kín</div>
+                                    </div>
+                                    
+                                    <div class="message-type" data-type="reconnect" onclick="selectMessageType(this, 'reconnect')">
+                                        <div class="type-icon">
+                                            <i class="fas fa-rotate-left"></i>
+                                        </div>
+                                        <div class="type-title">Muốn quay lại</div>
+                                        <div class="type-desc">Muốn thử một lần nữa</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-user-check"></i>
+                                    Gửi đến ai?
+                                </label>
+                                <div class="receiver-methods">
+                                    <div class="receiver-method selected" data-method="username" onclick="selectReceiverMethod(this, 'username')">
+                                        <i class="fas fa-at"></i>
+                                        <div>Username</div>
+                                    </div>
+                                    <div class="receiver-method" data-method="email" onclick="selectReceiverMethod(this, 'email')">
+                                        <i class="fas fa-envelope"></i>
+                                        <div>Email</div>
+                                    </div>
+                                    <div class="receiver-method" data-method="phone" onclick="selectReceiverMethod(this, 'phone')">
+                                        <i class="fas fa-phone"></i>
+                                        <div>Số điện thoại</div>
+                                    </div>
+                                    <div class="receiver-method" data-method="facebook" onclick="selectReceiverMethod(this, 'facebook')">
+                                        <i class="fab fa-facebook"></i>
+                                        <div>Facebook</div>
+                                    </div>
+                                </div>
+                                
+                                <input type="text" class="form-input" id="receiver-input" placeholder="Nhập username của người nhận...">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-heading"></i>
+                                    Tiêu đề tin nhắn
+                                </label>
+                                <input type="text" class="form-input" id="message-title" placeholder="Nhập tiêu đề tin nhắn...">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-comment-dots"></i>
+                                    Nội dung tin nhắn
+                                </label>
+                                <textarea class="form-textarea" id="message-content" placeholder="Viết những gì bạn muốn nói..."></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-user-secret"></i>
+                                    Gửi ẩn danh?
+                                </label>
+                                <select class="form-select" id="anonymous">
+                                    <option value="no">Không, hiển thị thông tin của tôi</option>
+                                    <option value="yes">Có, gửi ẩn danh (vẫn có link Facebook)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-paper-plane"></i>
+                                    Gửi qua kênh nào?
+                                </label>
+                                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                                    <label style="display: flex; align-items: center; gap: 8px;">
+                                        <input type="checkbox" id="send-inbox" checked>
+                                        <span>Hộp thư trên website</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 8px;">
+                                        <input type="checkbox" id="send-email" checked>
+                                        <span>Gửi qua Email</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 8px;">
+                                        <input type="checkbox" id="send-sms" checked>
+                                        <span>Gửi qua SMS</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <button class="btn btn-preview" onclick="previewMessage()">
+                                <i class="fas fa-eye"></i>
+                                Xem trước nội dung
+                            </button>
+                            
+                            <button class="btn" onclick="sendMessage()" id="send-button" style="display: none;">
+                                <i class="fas fa-paper-plane"></i>
+                                Gửi tin nhắn ngay
+                            </button>
+                        </div>
+                        
+                        <!-- Preview Section -->
+                        <div class="preview-section" id="preview-section">
+                            <div class="preview-header">
+                                <div class="preview-title">
+                                    <i class="fas fa-eye"></i>
+                                    XEM TRƯỚC NỘI DUNG
+                                </div>
+                                <button class="action-btn" onclick="closePreview()" style="background: #6c757d; color: white;">
+                                    <i class="fas fa-times"></i> Đóng
+                                </button>
+                            </div>
+                            
+                            <div class="preview-content" id="preview-content">
+                                <!-- Preview content sẽ được thêm bằng JavaScript -->
+                            </div>
+                            
+                            <div class="btn-group" style="margin-top: 20px;">
+                                <button class="btn" onclick="sendMessage()">
+                                    <i class="fas fa-paper-plane"></i>
+                                    Gửi tin nhắn ngay
+                                </button>
+                                <button class="btn btn-secondary" onclick="closePreview()">
+                                    <i class="fas fa-edit"></i>
+                                    Chỉnh sửa lại
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hộp thư đến -->
+                    <div class="form-section" id="inbox-form">
+                        <div class="card">
+                            <h2 class="card-title">
+                                <i class="fas fa-inbox"></i>
+                                Hộp thư đến của bạn
+                            </h2>
+                            
+                            <div class="inbox-container" id="inbox-container">
+                                <!-- Tin nhắn sẽ được thêm ở đây bằng JavaScript -->
+                                <div class="empty-state">
+                                    <div class="empty-icon">
+                                        <i class="fas fa-envelope-open"></i>
+                                    </div>
+                                    <h3>Hộp thư trống</h3>
+                                    <p>Bạn chưa có tin nhắn nào. Khi ai đó gửi tin nhắn cho bạn, nó sẽ xuất hiện ở đây.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hồ sơ cá nhân -->
+                    <div class="form-section" id="profile-form">
+                        <div class="card">
+                            <h2 class="card-title">
+                                <i class="fas fa-user-circle"></i>
+                                Hồ sơ cá nhân
+                            </h2>
+                            
+                            <!-- Xem thông tin -->
+                            <div id="view-profile">
+                                <div class="profile-header">
+                                    <div class="profile-avatar" id="profile-avatar">
+                                        U
+                                    </div>
+                                    <div class="profile-info">
+                                        <h3 id="profile-name">Chưa đăng ký</h3>
+                                        <p id="profile-username">Chưa có username</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <div class="info-label"><i class="fas fa-at"></i> Username:</div>
+                                    <div id="profile-username-display">Chưa có</div>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <div class="info-label"><i class="fas fa-user"></i> Họ và tên:</div>
+                                    <div id="profile-fullname-display">Chưa có</div>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <div class="info-label"><i class="fas fa-envelope"></i> Email:</div>
+                                    <div id="profile-email-display">Chưa có</div>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <div class="info-label"><i class="fas fa-phone"></i> Số điện thoại:</div>
+                                    <div id="profile-phone-display">Chưa có</div>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <div class="info-label"><i class="fab fa-facebook"></i> Facebook:</div>
+                                    <div id="profile-facebook-display">Chưa có</div>
+                                </div>
+                                
+                                <button class="btn" onclick="showEditProfile()">
+                                    <i class="fas fa-edit"></i>
+                                    Chỉnh sửa thông tin
+                                </button>
+                            </div>
+                            
+                            <!-- Chỉnh sửa thông tin -->
+                            <div id="edit-profile" class="edit-profile-form">
+                                <div class="form-group">
+                                    <label class="form-label required">
+                                        <i class="fas fa-user"></i>
+                                        Họ và tên
+                                    </label>
+                                    <input type="text" class="form-input" id="edit-fullname" placeholder="Nhập họ tên đầy đủ">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label required">
+                                        <i class="fas fa-envelope"></i>
+                                        Email
+                                    </label>
+                                    <input type="email" class="form-input" id="edit-email" placeholder="email@example.com">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label required">
+                                        <i class="fas fa-phone"></i>
+                                        Số điện thoại
+                                    </label>
+                                    <input type="tel" class="form-input" id="edit-phone" placeholder="0987 654 321">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label required">
+                                        <i class="fab fa-facebook"></i>
+                                        Link Facebook
+                                    </label>
+                                    <input type="text" class="form-input" id="edit-facebook" placeholder="https://facebook.com/username-của-bạn">
+                                    <small style="color: #666; display: block; margin-top: 5px;">Facebook là bắt buộc để người khác có thể kết nối với bạn</small>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <i class="fas fa-lock"></i>
+                                        Mật khẩu mới (nếu muốn đổi)
+                                    </label>
+                                    <input type="password" class="form-input" id="edit-password" placeholder="Để trống nếu không muốn đổi">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <i class="fas fa-lock"></i>
+                                        Xác nhận mật khẩu mới
+                                    </label>
+                                    <input type="password" class="form-input" id="edit-confirm-password" placeholder="Nhập lại mật khẩu mới">
+                                </div>
+                                
+                                <div class="btn-group">
+                                    <button class="btn" onclick="updateProfile()">
+                                        <i class="fas fa-save"></i>
+                                        Lưu thay đổi
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="cancelEditProfile()">
+                                        <i class="fas fa-times"></i>
+                                        Hủy bỏ
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="side-content">
+                    <div class="card">
+                        <h2 class="card-title">
+                            <i class="fas fa-info-circle"></i>
+                            Cách sử dụng HeartConnect
+                        </h2>
+                        
+                        <div style="line-height: 1.8;">
+                            <p><strong>1. Đăng ký tài khoản:</strong> Nhập đầy đủ thông tin và link Facebook bắt buộc.</p>
+                            <p><strong>2. Đăng nhập:</strong> Dùng username, email hoặc số điện thoại.</p>
+                            <p><strong>3. Gửi tin nhắn:</strong> Chọn loại tin, người nhận và viết nội dung.</p>
+                            <p><strong>4. Xem trước:</strong> Kiểm tra kỹ trước khi gửi đi.</p>
+                            <p><strong>5. Quản lý hồ sơ:</strong> Cập nhật thông tin cá nhân khi cần.</p>
+                            <p><strong>6. Kiểm tra hộp thư:</strong> Xem tin nhắn đã nhận và trả lời.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h2 class="card-title">
+                            <i class="fas fa-shield-alt"></i>
+                            Bảo mật & Riêng tư
+                        </h2>
+                        
+                        <div style="line-height: 1.8;">
+                            <p><strong>🔒 Mật khẩu an toàn:</strong> Được mã hóa và bảo vệ.</p>
+                            <p><strong>📧 Khôi phục mật khẩu:</strong> Qua email hoặc số điện thoại.</p>
+                            <p><strong>👤 Ẩn danh tùy chọn:</strong> Gửi tin mà không tiết lộ danh tính.</p>
+                            <p><strong>💾 Dữ liệu cá nhân:</strong> Chỉ bạn mới có quyền truy cập.</p>
+                            <p><strong>🚫 Không spam:</strong> Cam kết không gửi tin nhắn rác.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h2 class="card-title">
+                            <i class="fas fa-question-circle"></i>
+                            Câu hỏi thường gặp
+                        </h2>
+                        
+                        <div style="line-height: 1.8;">
+                            <p><strong>🤔 Tại sao cần Facebook?</strong> Để xác minh danh tính và dễ kết nối.</p>
+                            <p><strong>📱 Có app di động không?</strong> Website hoạt động tốt trên mọi thiết bị.</p>
+                            <p><strong>⏱️ Tin nhắn lưu bao lâu?</strong> Được lưu trữ an toàn trong hệ thống.</p>
+                            <p><strong>🔔 Nhận thông báo thế nào?</strong> Qua email, SMS và hộp thư website.</p>
+                            <p><strong>❌ Hủy tài khoản được không?</strong> Liên hệ quản trị viên để được hỗ trợ.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer - Liên hệ, Góp ý & Trợ giúp -->
+    <footer>
+        <div class="footer-content">
+            <!-- Cột 1: Liên hệ -->
+            <div class="footer-column">
+                <h3>
+                    <i class="fas fa-headset"></i>
+                    Liên hệ với chúng tôi
+                </h3>
+                <ul>
+                    <li>
+                        <i class="fas fa-envelope"></i>
+                        Email: <a href="mailto:support@heartconnect.vn">support@heartconnect.vn</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-phone"></i>
+                        Hotline: <a href="tel:19001234">1900 1234</a>
+                    </li>
+                    <li>
+                        <i class="fab fa-facebook"></i>
+                        Facebook: <a href="https://facebook.com/heartconnect" target="_blank">fb.com/heartconnect</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-map-marker-alt"></i>
+                        Địa chỉ: Tầng 5, Tòa nhà HeartConnect, Hà Nội
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Cột 2: Góp ý & Báo lỗi -->
+            <div class="footer-column">
+                <h3>
+                    <i class="fas fa-comment-dots"></i>
+                    Góp ý & Báo lỗi
+                </h3>
+                <p style="margin-bottom: 20px;">Chúng tôi luôn lắng nghe ý kiến của bạn để cải thiện dịch vụ.</p>
+                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <input type="email" id="feedback-email" placeholder="Email của bạn" style="flex: 1; padding: 12px; border-radius: 8px; border: none; font-size: 14px;">
+                    <button onclick="sendFeedback()" style="background: white; color: #ff4d94; border: none; padding: 0 20px; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <textarea id="feedback-content" placeholder="Nội dung góp ý/báo lỗi..." style="width: 100%; padding: 12px; border-radius: 8px; border: none; font-size: 14px; min-height: 100px;"></textarea>
+            </div>
+            
+            <!-- Cột 3: Trợ giúp & Hỗ trợ -->
+            <div class="footer-column">
+                <h3>
+                    <i class="fas fa-question-circle"></i>
+                    Trợ giúp nhanh
+                </h3>
+                <ul>
+                    <li>
+                        <a href="#" onclick="showHelp('faq')">
+                            <i class="fas fa-list"></i>
+                            Câu hỏi thường gặp (FAQ)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showHelp('guide')">
+                            <i class="fas fa-book"></i>
+                            Hướng dẫn sử dụng chi tiết
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showHelp('privacy')">
+                            <i class="fas fa-shield-alt"></i>
+                            Chính sách bảo mật
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showHelp('terms')">
+                            <i class="fas fa-file-contract"></i>
+                            Điều khoản dịch vụ
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showHelp('contact')">
+                            <i class="fas fa-life-ring"></i>
+                            Hỗ trợ trực tuyến 24/7
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Bản quyền -->
+        <div class="copyright">
+            <p style="margin-bottom: 10px;">
+                &copy; 2023 <strong>HeartConnect</strong> - Nơi trao gửi tình cảm chân thành
+            </p>
+            <p style="font-size: 0.9rem; opacity: 0.8;">
+                Được thiết kế với <i class="fas fa-heart" style="color: #ffeb3b;"></i> dành cho cộng đồng yêu thương
+            </p>
+        </div>
+    </footer>
+    
+    <!-- Thông báo -->
+    <div class="notification" id="notification">
+        <button class="notification-close" onclick="closeNotification()">×</button>
+        <div class="notification-title" id="notification-title">Thông báo</div>
+        <div id="notification-message">Nội dung thông báo</div>
+    </div>
+<script type="module">
+    // 1. Import Supabase từ Skypack
+    import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js@2';
+    
+    // 2. Khởi tạo client với keys của bạn
+    const supabase = createClient(
+        'https://acyonxdejrkmavzcqpme.supabase.co',
+        'sb_publishable_fILj-UYTQ8wTmZNZFbBEtg_1w8l09sV'
+    );
+    
+    // 3. Đặt vào window để các hàm global có thể truy cập
+    window.supabase = supabase;
+    
+    console.log('✅ Supabase đã khởi tạo thành công!');
+    
+    // 4. Tải script.js sau khi supabase đã sẵn sàng
+    const script = document.createElement('script');
+    script.src = 'script.js';
+    document.body.appendChild(script);
+</script>
+</body>
+</html>
