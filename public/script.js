@@ -1289,4 +1289,7 @@ function showNotification(title, message, type = 'info') {
 // Đóng thông báo
 function closeNotification() {
     document.getElementById('notification').style.display = 'none';
+
 }
+
+initApp();
